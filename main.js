@@ -7,7 +7,7 @@ myHeader = Vue.component('app-header', {
 		}
 	},
 	template: '#header-template'
-})
+});
 
 myFooter = Vue.component('app-footer', {
 	data: function () {
@@ -16,7 +16,7 @@ myFooter = Vue.component('app-footer', {
 		}
 	},
 	template: '#footer-template'
-})
+});
 
 LoginView = Vue.component('login', {
 	data: function () {
@@ -39,11 +39,12 @@ LoginView = Vue.component('login', {
 				console.log(error)
 				alert(error.message)
 			}).finally(nada => {
+				console.log('login attempt done')
 				// router.push('/');
 			});
 		}
 	}
-})
+});
 
 DashboardView = Vue.component('dashboard', {
 	data: function () {
