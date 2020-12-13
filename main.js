@@ -167,6 +167,7 @@ var app = new Vue({
 	},
 	methods: {
 		catchCSRF: function (csrf) {
+			alert('catching csrf in root')
 			this.csrf = csrf
 		}
 	}
