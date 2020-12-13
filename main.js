@@ -51,7 +51,7 @@ LoginView = Vue.component('login', {
 				if (debug) {
 					console.log(response)
 				}
-				this.$emit('csrf', response.data.csrf)
+				this.$store.dispatch('saveCSRFToken', response.data.csrf)
 			}).catch(error => {
 				alert(error.message)
 			}).finally(nada => {
@@ -78,19 +78,12 @@ DashboardView = Vue.component('dashboard', {
 			searchWebsite: '',
 		}
 	},
-	props: ['csrf'],
 	template: '#dashboard-template',
 	mounted() {
 		console.log('mounted - dashboard')
 		// this.load();
-		console.log('csrf', this.csrf)
 	},
 	beforeMount() {
-		// set auth header
-		//  axios.defaults.headers = {
-		//     'X-Unlock': this.getUnlock()
-		// }
-
 		console.log('before mount - dashboard')
 		// ensure this is loaded
 		this.load();
@@ -101,9 +94,9 @@ DashboardView = Vue.component('dashboard', {
 
 			axios.get(url, {
 				withCredentials: true,
-				headers: {
-					'X-CSRF': this.csrf
-				}
+				// headers: {
+				// 	'X-CSRF': this.csrf
+				// }
 			}).then(response => {
 				this.websites = response.data.data
 			}).catch(error => {
@@ -159,16 +152,32 @@ const router = new VueRouter({
 	routes // short for `routes: routes`
 });
 
+const store = new Vuex.Store({
+	state: {
+		user: {
+			csrf: ''
+		}
+	},
+	mutations: {
+		saveCSRFToken: function (csrf) {
+			state.user.csrf = csrf
+		},
+		removeCSRFToken: function () {
+			state.user.csrf = ''
+		}
+	},
+	actions: {
+	}
+});
+
 var app = new Vue({
 	router,
 	el: '#app',
-	data: {
-		'csrf': ''
-	},
-	methods: {
-		catchCSRF: function (csrf) {
-			alert('catching csrf in root')
-			this.csrf = csrf
+	store: store,
+	beforeMount() {
+		// set auth header
+		axios.defaults.headers = {
+			'X-CSRF': this.$store.state.user.csrf
 		}
 	}
 });

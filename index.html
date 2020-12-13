@@ -9,9 +9,9 @@
 
 <body class="h-full flex flex-col">
 	<!-- This example requires Tailwind CSS v2.0+ -->
-	<div id="app" class="h-full flex flex-col" v-on:csrf="catchCSRF">
+	<div id="app" class="h-full flex flex-col">
 		<app-header></app-header>
-		<router-view v-bind:csrf="csrf"></router-view>
+		<router-view></router-view>
 		<app-footer></app-footer>
 	</div>
 
@@ -286,6 +286,7 @@
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/vuex/dist/vuex.js"></script>
 	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script src="main.js"></script>
