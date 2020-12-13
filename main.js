@@ -96,9 +96,6 @@ DashboardView = Vue.component('dashboard', {
 		this.load();
 	},
 	methods: {
-		catchCSRF: function (csrf) {
-			this.csrf = csrf;
-		},
 		load: function () {
 			var url = BackendAPI + '/websites';
 
@@ -169,7 +166,7 @@ var app = new Vue({
 		'csrf': ''
 	},
 	methods: {
-		'catchCSRF': function (csrf) {
+		catchCSRF: function (csrf) {
 			this.csrf = csrf
 		}
 	}
