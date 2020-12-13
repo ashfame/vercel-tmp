@@ -45,6 +45,8 @@ LoginView = Vue.component('login', {
 			axios.post(url, {
 				u: this.u,
 				p: this.p
+			}, {
+				withCredentials: true
 			}).then(response => {
 				if (debug) {
 					console.log(response)
