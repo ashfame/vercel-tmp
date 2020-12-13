@@ -51,7 +51,7 @@ LoginView = Vue.component('login', {
 				if (debug) {
 					console.log(response)
 				}
-				this.$emit('csrf-token', response.data.csrf)
+				this.$emit('csrf', response.data.csrf)
 			}).catch(error => {
 				alert(error.message)
 			}).finally(nada => {
@@ -66,7 +66,7 @@ LoginView = Vue.component('login', {
 DashboardView = Vue.component('dashboard', {
 	data: function () {
 		return {
-			authToken: '',
+			csrf: '',
 			// UI state
 			initializingScreen: true,
 			// Data
@@ -94,6 +94,9 @@ DashboardView = Vue.component('dashboard', {
 		this.load();
 	},
 	methods: {
+		catchCSRF: function (csrf) {
+			this.csrf = csrf;
+		},
 		load: function () {
 			var url = BackendAPI + '/websites';
 
