@@ -66,7 +66,7 @@ LoginView = Vue.component('login', {
 DashboardView = Vue.component('dashboard', {
 	data: function () {
 		return {
-			csrf: '',
+			// csrf: '',
 			// UI state
 			initializingScreen: true,
 			// Data
@@ -78,10 +78,12 @@ DashboardView = Vue.component('dashboard', {
 			searchWebsite: '',
 		}
 	},
+	props: ['csrf'],
 	template: '#dashboard-template',
 	mounted() {
 		console.log('mounted - dashboard')
 		// this.load();
+		console.log('csrf', this.csrf)
 	},
 	beforeMount() {
 		// set auth header
@@ -100,12 +102,18 @@ DashboardView = Vue.component('dashboard', {
 		load: function () {
 			var url = BackendAPI + '/websites';
 
-			axios.get(url).then(response => {
+			axios.get(url, {
+				withCredentials: true,
+				headers: {
+					'X-CSRF': this.csrf
+				}
+			}).then(response => {
 				this.websites = response.data.data
 			}).catch(error => {
 				if (error.response.status == 401) {
-					alert('redirecting to login')
-					router.push('/login')
+					if (confirm('go to /login')) {
+						router.push('/login')
+					}
 				}
 				console.error(error.response.data.data.message)
 			}).finally(nada => {
@@ -158,11 +166,11 @@ var app = new Vue({
 	router,
 	el: '#app',
 	data: {
-		'csrfp': ''
+		'csrf': ''
 	},
 	methods: {
-		'save-csrf-token': function () {
-
+		'catchCSRF': function (csrf) {
+			this.csrf = csrf
 		}
 	}
 });
