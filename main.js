@@ -1,5 +1,9 @@
 var debug = true;
 
+// const BackendAPI = 'https://httpscop.com/api/v1';
+const BackendAPI = 'http://httpscop.lo/api/v1';
+const NotFoundView = { template: '<p>404 yo</p>' };
+
 myHeader = Vue.component('app-header', {
 	data: function () {
 		return {
@@ -21,27 +25,38 @@ myFooter = Vue.component('app-footer', {
 LoginView = Vue.component('login', {
 	data: function () {
 		return {
+			// UI state
+			loggingInScreen: false,
+			// Data
 			u: '',
 			p: ''
 		}
 	},
 	template: '#login-template',
 	methods: {
-		authenticate: function () {
+		authenticate: function (e) {
+			if (this.loggingInScreen) {
+				return
+			}
+
+			this.loggingInScreen = true;
+
 			var url = BackendAPI + '/session';
 			axios.post(url, {
 				u: this.u,
 				p: this.p
 			}).then(response => {
-				console.log('data', data)
-				console.log(response.data.data);
+				if (debug) {
+					console.log(response)
+				}
+				this.$emit('csrf-token', response.data.csrf)
 			}).catch(error => {
-				console.log(error)
 				alert(error.message)
 			}).finally(nada => {
-				console.log('login attempt done')
-				// router.push('/');
+				this.loggingInScreen = false;
 			});
+
+			e.preventDefault();
 		}
 	}
 });
@@ -83,7 +98,6 @@ DashboardView = Vue.component('dashboard', {
 			axios.get(url).then(response => {
 				this.websites = response.data.data
 			}).catch(error => {
-				console.log(error)
 				if (error.response.status == 401) {
 					alert('redirecting to login')
 					router.push('/login')
@@ -92,6 +106,9 @@ DashboardView = Vue.component('dashboard', {
 			}).finally(nada => {
 				this.initializingScreen = false;
 			});
+		},
+		hasValidSession: function () {
+
 		},
 		login: function () {
 			// @TODO pass on username/email & password to backend for auth
@@ -122,8 +139,6 @@ DashboardView = Vue.component('dashboard', {
 	}
 });
 
-const BackendAPI = 'https://httpscop.com/api/v1';
-const NotFoundView = { template: '<p>404 yo</p>' };
 
 const routes = [
 	{ path: '/', component: DashboardView },
@@ -136,5 +151,13 @@ const router = new VueRouter({
 
 var app = new Vue({
 	router,
-	el: '#app'
+	el: '#app',
+	data: {
+		'csrfp': ''
+	},
+	methods: {
+		'save-csrf-token': function () {
+
+		}
+	}
 });
