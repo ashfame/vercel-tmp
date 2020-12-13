@@ -9,7 +9,7 @@
 
 <body class="h-full flex flex-col">
 	<!-- This example requires Tailwind CSS v2.0+ -->
-	<div id="app" class="h-full flex flex-col" @csrf="catchCSRF">
+	<div id="app" class="h-full flex flex-col" v-on:csrf="catchCSRF">
 		<app-header></app-header>
 		<router-view v-bind:csrf="csrf"></router-view>
 		<app-footer></app-footer>
