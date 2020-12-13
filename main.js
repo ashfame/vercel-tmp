@@ -1,7 +1,7 @@
 var debug = true;
 
-// const BackendAPI = 'https://httpscop.com/api/v1';
-const BackendAPI = 'http://httpscop.lo/api/v1';
+const BackendAPI = 'https://httpscop.com/api/v1';
+// const BackendAPI = 'http://httpscop.lo/api/v1';
 const NotFoundView = { template: '<p>404 yo</p>' };
 
 myHeader = Vue.component('app-header', {
