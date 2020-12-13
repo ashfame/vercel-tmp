@@ -11,7 +11,7 @@
 	<!-- This example requires Tailwind CSS v2.0+ -->
 	<div id="app" class="h-full flex flex-col" @csrf="catchCSRF">
 		<app-header></app-header>
-		<router-view csrf="csrf"></router-view>
+		<router-view v-bind:csrf="csrf"></router-view>
 		<app-footer></app-footer>
 	</div>
 
