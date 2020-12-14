@@ -49,9 +49,10 @@ LoginView = Vue.component('login', {
 				withCredentials: true
 			}).then(response => {
 				if (debug) {
-					console.log(response)
+					console.log(response, response.data.csrf)
 				}
-				this.$store.dispatch('saveCSRFToken', response.data.csrf)
+				this.$store.commit('saveCSRFToken', response.data.csrf)
+				router.push('/')
 			}).catch(error => {
 				alert(error.message)
 			}).finally(nada => {
@@ -94,9 +95,9 @@ DashboardView = Vue.component('dashboard', {
 
 			axios.get(url, {
 				withCredentials: true,
-				// headers: {
-				// 	'X-CSRF': this.csrf
-				// }
+				headers: {
+					'X-CSRF': this.$store.state.csrf
+				}
 			}).then(response => {
 				this.websites = response.data.data
 			}).catch(error => {
@@ -154,16 +155,15 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
 	state: {
-		user: {
-			csrf: ''
-		}
+		csrf: ''
 	},
 	mutations: {
-		saveCSRFToken: function (csrf) {
-			state.user.csrf = csrf
+		saveCSRFToken: function (state, payload) {
+			console.log('i am here', payload)
+			state.csrf = payload
 		},
 		removeCSRFToken: function () {
-			state.user.csrf = ''
+			state.csrf = ''
 		}
 	},
 	actions: {
@@ -173,11 +173,5 @@ const store = new Vuex.Store({
 var app = new Vue({
 	router,
 	el: '#app',
-	store: store,
-	beforeMount() {
-		// set auth header
-		axios.defaults.headers = {
-			'X-CSRF': this.$store.state.user.csrf
-		}
-	}
+	store
 });
